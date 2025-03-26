@@ -120,4 +120,4 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/change-password', [ChangePassword::class, 'update'])->name('change.perform');
 });
 
-Route::get('/', [App\Http\Controllers\HomeController_new::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

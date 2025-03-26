@@ -26,14 +26,12 @@
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/",
-            "LaravelFrontendPresets\\ArgonPreset\\": "presets/argon/src"
+            "Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/",
-            "LaravelFrontendPresets\\ArgonPreset\\": "presets/argon/src"
+            "Tests\\": "tests/"
         }
     },
     "scripts": {
