@@ -1,66 +1,261 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+ # Inventory Management System Documentation
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Table of Contents
+1. [Introduction](#introduction)
+2. [System Architecture](#system-architecture)
+3. [Installation & Setup](#installation--setup)
+4. [User Guide](#user-guide)
+5. [Administration](#administration)
+6. [Troubleshooting](#troubleshooting)
+7. [Glossary](#glossary)
+8. [References](#references)
 
-## About Laravel
+## Introduction
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Purpose
+The Inventory Management System is a comprehensive solution designed to streamline inventory tracking, user management, and role-based access control. It helps organizations maintain accurate stock levels, track transactions, and manage user permissions effectively.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Target Audience
+- Inventory Managers
+- Warehouse Supervisors
+- System Administrators
+- Regular Users (with appropriate permissions)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Key Features
+- Real-time inventory tracking
+- User role management
+- Transaction history
+- Stock level monitoring
+- Import/Export functionality
+- Role-based access control
 
-## Learning Laravel
+## System Architecture
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Technology Stack
+- **Backend**: Laravel (PHP Framework)
+- **Frontend**: 
+  - Argon Dashboard Template
+  - Bootstrap 5
+  - JavaScript/jQuery
+- **Database**: MySQL/PostgreSQL
+- **Authentication**: Laravel Auth with Spatie Permission
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Core Components
+1. **User Management**
+   - User authentication
+   - Role assignment
+   - Permission management
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. **Inventory Management**
+   - Stock tracking
+   - Location management
+   - Transaction logging
 
-## Laravel Sponsors
+3. **Role Management**
+   - Predefined roles
+   - Permission assignment
+   - User role association
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### Data Flow
+1. User Authentication → Role Verification → Permission Check
+2. Inventory Updates → Transaction Recording → Stock Level Adjustment
+3. User Actions → Permission Validation → System Response
 
-### Premium Partners
+## Installation & Setup
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Prerequisites
+- PHP 8.0 or higher
+- Composer
+- Node.js & NPM
+- MySQL/PostgreSQL
+- Web Server (Apache/Nginx)
 
-## Contributing
+### Installation Steps
+1. Clone the repository:
+   ```bash
+   git clone [repository-url]
+   cd [project-directory]
+   ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+2. Install PHP dependencies:
+   ```bash
+   composer install
+   ```
 
-## Code of Conduct
+3. Install NPM dependencies:
+   ```bash
+   npm install
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+4. Configure environment:
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-## Security Vulnerabilities
+5. Configure database in `.env`:
+   ```
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=your_database
+   DB_USERNAME=your_username
+   DB_PASSWORD=your_password
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+6. Run migrations:
+   ```bash
+   php artisan migrate
+   ```
 
-## License
+7. Seed initial data:
+   ```bash
+   php artisan db:seed
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+8. Start the development server:
+   ```bash
+   php artisan serve
+   ```
+
+## User Guide
+
+### User Roles
+1. **Super Admin**
+   - Full system access
+   - User management
+   - Role management
+   - System configuration
+
+2. **Admin**
+   - User management
+   - Inventory management
+   - Transaction management
+
+3. **Inventory Manager**
+   - Stock management
+   - Transaction processing
+   - Report generation
+
+4. **Regular User**
+   - View inventory
+   - Process transactions
+   - Generate reports
+
+### Common Operations
+
+#### Inventory Management
+1. View Inventory
+   - Navigate to Inventory section
+   - Use filters for specific items
+   - Export data if needed
+
+2. Update Stock
+   - Select item
+   - Enter quantity
+   - Add notes
+   - Submit transaction
+
+3. Import/Export
+   - Download template
+   - Fill in data
+   - Upload file
+   - Verify import
+
+#### User Management
+1. Create User
+   - Navigate to Users
+   - Click "Add User"
+   - Fill in details
+   - Assign roles
+   - Save
+
+2. Edit User
+   - Select user
+   - Modify details
+   - Update roles
+   - Save changes
+
+## Administration
+
+### Role Management
+- Predefined roles cannot be modified
+- View role permissions
+- Monitor user assignments
+- Track role usage
+
+### System Configuration
+1. **Database Backup**
+   ```bash
+   php artisan backup:run
+   ```
+
+2. **Cache Management**
+   ```bash
+   php artisan cache:clear
+   php artisan config:clear
+   ```
+
+3. **Queue Management**
+   ```bash
+   php artisan queue:work
+   ```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Sidebar Not Working**
+   - Clear browser cache
+   - Check JavaScript console
+   - Verify custom.js is loaded
+
+2. **Search Functionality Issues**
+   - Verify database connection
+   - Check search parameters
+   - Clear application cache
+
+3. **Import/Export Problems**
+   - Verify file format
+   - Check file permissions
+   - Validate data structure
+
+### Error Messages
+- "There is no role named X for guard web"
+  - Solution: Verify role exists in database
+  - Check role assignment syntax
+
+- "Undefined method 'save'"
+  - Solution: Verify model relationships
+  - Check authentication setup
+
+## Glossary
+
+### Terms
+- **SKU**: Stock Keeping Unit
+- **RBAC**: Role-Based Access Control
+- **CRUD**: Create, Read, Update, Delete
+- **API**: Application Programming Interface
+
+### Components
+- **Sidenav**: Side navigation menu
+- **Dashboard**: Main system overview
+- **Inventory**: Stock management system
+- **Transaction**: Stock movement record
+
+## References
+
+### Documentation
+- [Laravel Documentation](https://laravel.com/docs)
+- [Spatie Permission Documentation](https://spatie.be/docs/laravel-permission)
+- [Argon Dashboard Documentation](https://demos.creative-tim.com/argon-dashboard)
+
+### Support
+- Technical Support: [support-email]
+- Issue Tracker: [repository-issues]
+- Documentation Updates: [docs-repository]
+
+### Additional Resources
+- [PHP Documentation](https://www.php.net/docs.php)
+- [MySQL Documentation](https://dev.mysql.com/doc/)
+- [Bootstrap Documentation](https://getbootstrap.com/docs/)
