@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use App\Models\Inventory;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ItemController extends Controller
 {
@@ -97,12 +99,26 @@ class ItemController extends Controller
             'category' => $validated['category'],
         ]);
 
+        $initialQuantity = $validated['initial_quantity'] ?? 0;
+        
         Inventory::create([
             'item_id' => $item->id,
-            'on_hand_quantity' => $validated['initial_quantity'] ?? 0,
+            'on_hand_quantity' => $initialQuantity,
             'off_hand_quantity' => 0,
             'location' => $validated['location'] ?? null,
         ]);
+
+        if ($initialQuantity > 0) {
+            Transaction::create([
+                'item_id' => $item->id,
+                'user_id' => Auth::id(),
+                'type' => 'on_hand',
+                'quantity' => $initialQuantity,
+                'total_price' => $initialQuantity * $item->unit_price,
+                'total_weight' => $initialQuantity * $item->unit_weight,
+                'notes' => 'Initial stock addition',
+            ]);
+        }
 
         return redirect()->route('items.index')->with('success', 'Item created successfully.');
     }

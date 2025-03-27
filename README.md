@@ -29,6 +29,38 @@ The Inventory Management System is a comprehensive solution designed to streamli
 - Import/Export functionality
 - Role-based access control
 
+### New Features
+- Transaction Creation with 30-day Limit
+- Global Search with Permission-based Results
+- Quick Access Navigation
+- Enhanced UI/UX
+- Modern Background Graphics
+- Improved Form Validation
+- Better Error Handling
+- Mobile Responsive Design
+
+### Core Features
+- User Authentication & Authorization
+- Role-Based Access Control (RBAC)
+- Item Management
+- Inventory Tracking
+- Transaction History
+- User Management
+- Role Management
+- Profile Management
+- Export/Import Functionality
+- Search Functionality
+
+### Technical Features
+- Laravel 10.x
+- MySQL Database
+- Blade Templates
+- Tailwind CSS
+- Alpine.js
+- Laravel Sanctum
+- Spatie Permission Package
+- Laravel Excel for Import/Export
+
 ## System Architecture
 
 ### Technology Stack
@@ -251,7 +283,7 @@ The Inventory Management System is a comprehensive solution designed to streamli
 - [Argon Dashboard Documentation](https://demos.creative-tim.com/argon-dashboard)
 
 ### Support
-- Technical Support: [support-email]
+- Technical Support: [satriommw@gmail.com]
 - Issue Tracker: [repository-issues]
 - Documentation Updates: [docs-repository]
 

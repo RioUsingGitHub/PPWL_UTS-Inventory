@@ -56,11 +56,11 @@
 
     <!--   Core JS Files   -->
     <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{{ asset('assets/js/core/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/smooth-scrollbar.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/chartjs.min.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
@@ -70,6 +70,75 @@
             }
             Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
         }
+
+        // Sidenav Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            var iconNavbarSidenav = document.getElementById('iconNavbarSidenav');
+            var iconSidenav = document.getElementById('iconSidenav');
+            var sidenav = document.getElementById('sidenav-main');
+            var body = document.getElementsByTagName('body')[0];
+            var className = 'g-sidenav-pinned';
+
+            // Function to handle sidenav state based on screen size
+            function handleSidenavState() {
+                if (window.innerWidth >= 1200) {
+                    body.classList.add(className);
+                    sidenav.classList.add('bg-white');
+                } else {
+                    body.classList.remove(className);
+                    sidenav.classList.remove('bg-white');
+                }
+            }
+
+            // Initial state
+            handleSidenavState();
+
+            // Handle window resize
+            window.addEventListener('resize', handleSidenavState);
+
+            // Handle mobile toggle
+            if (iconNavbarSidenav) {
+                iconNavbarSidenav.addEventListener('click', function() {
+                    if (!body.classList.contains(className)) {
+                        body.classList.add(className);
+                        setTimeout(function() {
+                            sidenav.classList.add('bg-white');
+                        }, 100);
+                    } else {
+                        body.classList.remove(className);
+                        setTimeout(function() {
+                            sidenav.classList.remove('bg-white');
+                        }, 100);
+                    }
+                });
+            }
+
+            // Handle desktop/tablet toggle
+            if (iconSidenav) {
+                iconSidenav.addEventListener('click', function() {
+                    if (body.classList.contains(className)) {
+                        body.classList.remove(className);
+                        setTimeout(function() {
+                            sidenav.classList.remove('bg-white');
+                        }, 100);
+                    }
+                });
+            }
+
+            // Close sidenav when clicking outside on mobile
+            document.addEventListener('click', function(e) {
+                if (window.innerWidth < 1200) {
+                    if (!sidenav.contains(e.target) && !iconNavbarSidenav.contains(e.target)) {
+                        if (body.classList.contains(className)) {
+                            body.classList.remove(className);
+                            setTimeout(function() {
+                                sidenav.classList.remove('bg-white');
+                            }, 100);
+                        }
+                    }
+                }
+            });
+        });
     </script>
     @stack('scripts')
 </body>

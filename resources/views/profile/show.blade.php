@@ -8,7 +8,9 @@
                 <div class="card-header pb-0">
                     <div class="d-flex align-items-center">
                         <p class="mb-0">Profile Information</p>
-                        <a href="{{ route('profile.edit') }}" class="btn btn-primary btn-sm ms-auto">Edit</a>
+                        <button type="button" class="btn btn-primary btn-sm ms-auto" data-bs-toggle="modal" data-bs-target="#editNameModal">
+                            Edit Name
+                        </button>
                     </div>
                 </div>
                 <div class="card-body">
@@ -22,14 +24,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-control-label">Name</label>
-                                <p class="form-control-static">{{ $user->name }}</p>
+                                <label for="name" class="form-control-label">Name</label>
+                                <p class="form-control-static" id="name">{{ $user->name }}</p>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-control-label">Email address</label>
-                                <p class="form-control-static">{{ $user->email }}</p>
+                                <label for="email" class="form-control-label">Email address</label>
+                                <p class="form-control-static" id="email">{{ $user->email }}</p>
                             </div>
                         </div>
                     </div>
@@ -38,14 +40,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-control-label">Department</label>
-                                <p class="form-control-static">{{ $user->department }}</p>
+                                <label for="department" class="form-control-label">Department</label>
+                                <p class="form-control-static" id="department">{{ $user->department }}</p>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label class="form-control-label">Employee ID</label>
-                                <p class="form-control-static">{{ $user->employee_id }}</p>
+                                <label for="employee_id" class="form-control-label">Employee ID</label>
+                                <p class="form-control-static" id="employee_id">{{ $user->employee_id }}</p>
                             </div>
                         </div>
                     </div>
@@ -54,8 +56,8 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="form-control-label">Roles</label>
-                                <p class="form-control-static">
+                                <label for="roles" class="form-control-label">Roles</label>
+                                <p class="form-control-static" id="roles">
                                     @foreach($user->roles as $role)
                                         <span class="badge bg-gradient-primary">{{ $role->name }}</span>
                                     @endforeach
@@ -64,8 +66,8 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="form-control-label">Permissions</label>
-                                <p class="form-control-static">
+                                <label for="permissions" class="form-control-label">Permissions</label>
+                                <p class="form-control-static" id="permissions">
                                     @foreach($user->getAllPermissions() as $permission)
                                         <span class="badge bg-gradient-info">{{ $permission->name }}</span>
                                     @endforeach
@@ -105,17 +107,17 @@
                         @endif
 
                         <div class="form-group">
-                            <label for="current_password">Current Password</label>
+                            <label for="current_password" class="form-control-label">Current Password</label>
                             <input type="password" name="current_password" id="current_password" class="form-control" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="password">New Password</label>
+                            <label for="password" class="form-control-label">New Password</label>
                             <input type="password" name="password" id="password" class="form-control" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="password_confirmation">Confirm New Password</label>
+                            <label for="password_confirmation" class="form-control-label">Confirm New Password</label>
                             <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required>
                         </div>
 
@@ -123,6 +125,32 @@
                     </form>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Name Modal -->
+<div class="modal fade" id="editNameModal" tabindex="-1" role="dialog" aria-labelledby="editNameModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editNameModalLabel">Edit Name</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ route('profile.update') }}">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="edit_name" class="form-control-label">Name</label>
+                        <input type="text" class="form-control" id="edit_name" name="name" value="{{ $user->name }}" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

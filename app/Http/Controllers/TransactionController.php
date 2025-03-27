@@ -17,10 +17,35 @@ class TransactionController extends Controller
         $this->middleware('permission:create-transactions', ['only' => ['create', 'store']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $transactions = Transaction::with(['item', 'user'])->latest()->paginate(10);
-        return view('transactions.index', compact('transactions'));
+        $query = Transaction::with(['item', 'user']);
+
+        // Search
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('item', function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('sku', 'like', "%{$search}%");
+            })->orWhereHas('user', function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            });
+        }
+
+        // Type filter
+        if ($request->filled('type')) {
+            $query->where('type', $request->type);
+        }
+
+        // Date filter
+        if ($request->filled('date')) {
+            $query->whereDate('created_at', $request->date);
+        }
+
+        $transactions = $query->latest()->paginate(10);
+        $items = Item::has('inventory')->get();
+        
+        return view('transactions.index', compact('transactions', 'items'));
     }
 
     public function show(Transaction $transaction)

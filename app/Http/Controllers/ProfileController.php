@@ -31,18 +31,12 @@ class ProfileController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
-            'department' => 'required|string|max:255',
-            'employee_id' => 'required|string|max:255|unique:users,employee_id,' . $user->id,
         ]);
 
         $user->name = $request->name;
-        $user->email = $request->email;
-        $user->department = $request->department;
-        $user->employee_id = $request->employee_id;
         $user->save();
 
-        return redirect()->route('profile.show')->with('success', 'Profile updated successfully');
+        return redirect()->route('profile.show')->with('success', 'Name updated successfully');
     }
 
     public function updatePassword(Request $request)

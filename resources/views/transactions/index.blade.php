@@ -9,7 +9,9 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <h6>Transactions</h6>
                             @can('create-transactions')
-                                <a href="{{ route('transactions.create') }}" class="btn btn-primary btn-sm">New Transaction</a>
+                                <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#createTransactionModal">
+                                    New Transaction
+                                </button>
                             @endcan
                         </div>
                         <div class="row mt-3">
@@ -99,6 +101,57 @@
             </div>
         </div>
     </div>
+
+    <!-- Create Transaction Modal -->
+    <div class="modal fade" id="createTransactionModal" tabindex="-1" role="dialog" aria-labelledby="createTransactionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createTransactionModalLabel">Create New Transaction</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="{{ route('transactions.store') }}">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="item_id" class="form-control-label">Item</label>
+                            <select class="form-control" id="item_id" name="item_id" required>
+                                <option value="">Select an item</option>
+                                @foreach($items as $item)
+                                    <option value="{{ $item->id }}" data-stock="{{ $item->inventory->on_hand_quantity }}">
+                                        {{ $item->name }} (Stock: {{ $item->inventory->on_hand_quantity }})
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="type" class="form-control-label">Type</label>
+                            <select class="form-control" id="type" name="type" required>
+                                <option value="on_hand">Add to Stock</option>
+                                <option value="off_hand">Remove from Stock</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="quantity" class="form-control-label">Quantity</label>
+                            <input type="number" class="form-control" id="quantity" name="quantity" required min="1">
+                            <small class="text-muted" id="stock-info"></small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notes" class="form-control-label">Notes</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Create Transaction</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts')
@@ -135,6 +188,33 @@
         if (urlParams.has('search')) searchInput.value = urlParams.get('search');
         if (urlParams.has('type')) typeFilter.value = urlParams.get('type');
         if (urlParams.has('date')) dateFilter.value = urlParams.get('date');
+
+        // Transaction modal functionality
+        const itemSelect = document.getElementById('item_id');
+        const typeSelect = document.getElementById('type');
+        const quantityInput = document.getElementById('quantity');
+        const stockInfo = document.getElementById('stock-info');
+
+        function updateStockInfo() {
+            const selectedOption = itemSelect.options[itemSelect.selectedIndex];
+            const currentStock = selectedOption.dataset.stock;
+            const isOffHand = typeSelect.value === 'off_hand';
+
+            if (selectedOption.value) {
+                stockInfo.textContent = `Available stock: ${currentStock}`;
+                if (isOffHand) {
+                    quantityInput.max = currentStock;
+                } else {
+                    quantityInput.removeAttribute('max');
+                }
+            } else {
+                stockInfo.textContent = '';
+                quantityInput.removeAttribute('max');
+            }
+        }
+
+        itemSelect.addEventListener('change', updateStockInfo);
+        typeSelect.addEventListener('change', updateStockInfo);
     });
 </script>
 @endpush

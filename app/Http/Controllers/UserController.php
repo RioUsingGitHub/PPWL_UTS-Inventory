@@ -42,11 +42,14 @@ class UserController extends Controller
             'roles.*' => 'exists:roles,name'
         ]);
 
+        // Remove roles from validated data before creating user
+        $roles = $validated['roles'];
+        unset($validated['roles']);
+
         $user = User::create($validated);
         
-        // Get role names from the selected role IDs
-        $roleNames = Role::whereIn('id', $request->roles)->pluck('name')->toArray();
-        $user->syncRoles($roleNames);
+        // Assign roles directly using the role names
+        $user->syncRoles($roles);
 
         return redirect()->route('users.index')
             ->with('success', 'User created successfully.');

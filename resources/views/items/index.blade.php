@@ -199,9 +199,15 @@
                                                     </a>
                                                 @endcan
                                                 @can('delete-items')
-                                                    <a href="{{ route('items.destroy', $item->id) }}" class="text-danger font-weight-bold text-xs">
-                                                        Delete
-                                                    </a>
+                                                    <form action="{{ route('items.destroy', $item->id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-link text-danger mb-0" onclick="return confirm('Are you sure you want to delete this item?')">
+                                                            <a class="text-danger font-weight-bold text-xs">
+                                                                Delete
+                                                            </a>
+                                                        </button>
+                                                    </form>
                                                 @endcan
                                             </td>
                                         </tr>

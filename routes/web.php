@@ -3,10 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PageController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
-use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\ItemController;
@@ -15,13 +13,13 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SearchController;
 
-// Redirect root to dashboard if authenticated
+// Finalized Routes - yey dah sai semua, well documented
 Route::get('/', function () {
     return redirect('/dashboard');
 })->middleware('auth');
 
-// Authentication Routes
 Auth::routes();
 
 // Dashboard (Protected)
@@ -34,9 +32,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
-    
-    // Dynamic Page Handler
-    Route::get('/{page}', [PageController::class, 'index'])->name('page')->where('page', 'virtual-reality|rtl');
     
     // Logout Route (POST for Security)
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
@@ -53,12 +48,10 @@ Route::middleware(['auth'])->group(function () {
     
     // Inventory & Transaction Management Routes
     Route::middleware(['permission:view-inventory|view-transactions'])->group(function () {
-        // Specific inventory routes first
         Route::get('/inventory/export', [InventoryController::class, 'export'])->name('inventory.export');
         Route::post('/inventory/import', [InventoryController::class, 'import'])->name('inventory.import');
         Route::get('/inventory/template', [InventoryController::class, 'downloadTemplate'])->name('inventory.template');
         
-        // Then the resource and other specific routes
         Route::resource('inventory', InventoryController::class);
         Route::get('/inventory/{inventory}', [InventoryController::class, 'show'])->name('inventory.show');
         
@@ -66,16 +59,13 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/offhand/{item}', [InventoryController::class, 'offhandForm'])->name('inventory.offhand.form');
         Route::post('/offhand/{item}', [InventoryController::class, 'processOffhand'])->name('inventory.offhand.process');
         
-        // Transaction Management
         Route::resource('transactions', TransactionController::class)->except(['edit', 'update', 'destroy']);
     });
     
     // Admin Only Routes
     Route::middleware(['role:admin|super-admin'])->group(function () {
-        // Role Management
         Route::resource('roles', RoleController::class);
         
-        // User Management
         Route::resource('users', UserController::class)->parameters(['users' => 'user']);
     });
 
@@ -120,4 +110,4 @@ Route::middleware(['guest'])->group(function () {
     Route::post('/change-password', [ChangePassword::class, 'update'])->name('change.perform');
 });
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/search', [SearchController::class, 'search'])->name('search');
