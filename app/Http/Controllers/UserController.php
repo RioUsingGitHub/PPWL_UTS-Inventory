@@ -61,28 +61,37 @@ class UserController extends Controller
         return view('users.show', compact('user'));
     }
 
-    public function edit(User $user)
+    public function edit(Request $request, User $user)
     {
         $roles = Role::all();
-        return view('users.edit', compact('user', 'roles'));
+        return view('users.edit', compact('user', 'roles', 'request'));
     }
 
     public function update(Request $request, User $user)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'department' => 'required|string|max:255',
+            'employee_id' => 'required|string|max:255|unique:users,employee_id,' . $user->id,
             'roles' => 'required|array',
             'roles.*' => 'exists:roles,name'
         ]);
 
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
+        if ($request->filled('password')) {
+            $request->validate([
+                'password' => 'required|string|min:8|confirmed'
+            ]);
+            $validated['password'] = $request->password;
+        }
 
+        $roles = $validated['roles'];
+        unset($validated['roles']);
+
+        $user->forceFill($validated)->save();
+        
         // Sync roles using role names
-        $user->syncRoles($request->roles);
+        $user->syncRoles($roles);
 
         return redirect()->route('users.index')
             ->with('success', 'User updated successfully');

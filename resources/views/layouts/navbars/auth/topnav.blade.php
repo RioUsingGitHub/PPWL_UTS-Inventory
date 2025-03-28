@@ -104,6 +104,15 @@
                         <span class="d-sm-inline d-none">Profile</span>
                     </a>
                 </li>
+                <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+                    <a href="javascript:;" class="nav-link text-black p-0" id="iconNavbarSidenav">
+                        <div class="sidenav-toggler-inner">
+                            <i class="sidenav-toggler-line bg-black"></i>
+                            <i class="sidenav-toggler-line bg-black"></i>
+                            <i class="sidenav-toggler-line bg-black"></i>
+                        </div>
+                    </a>
+                </li>
                 <li class="nav-item px-3 d-flex align-items-center">
                     <div class="nav-item dropdown">
                         <a href="javascript:;" class="nav-link text-black p-0" id="dropdownSettings"
